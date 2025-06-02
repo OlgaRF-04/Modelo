@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="style.css">
+<div class="container">
+    <div>Teachable Machine Image Model</div>
+    <div id="webcam-container"></div>
+    <button id="start-button" type="button" onclick="init()">Start</button>
+    <div id="label-container"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "https://teachablemachine.withgoogle.com/models/99iY99Psf/";
+
+    let model, webcam, labelContainer, maxPredictions;
+
+    // Load the image model and setup the webcam
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const flip = true;
+        webcam = new tmImage.Webcam(200, 200, flip);
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        // Ocultar el botón de inicio
+        document.getElementById("start-button").style.display = "none";
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    // run the webcam image through the image model
+    async function predict() {
+        const prediction = await model.predict(webcam.canvas);
+        labelContainer.innerHTML = "";                                  // Limpia el contenido anterior
+
+        for (let i = 0; i < maxPredictions; i++) {
+            const prob = (prediction[i].probability * 100).toFixed(0);
+            const className = prediction[i].className;
+
+            // Crear elementos
+            const labelDiv = document.createElement("div");
+            labelDiv.className = "label-bar";
+            labelDiv.innerText = `${className}: ${prob}%`;
+
+            const progressContainer = document.createElement("div");
+            progressContainer.className = "progress-container";
+
+            const progressBar = document.createElement("div");
+            progressBar.className = "progress-bar";
+            progressBar.style.width = `${prob}%`;
+
+            // Armar elementos
+            progressContainer.appendChild(progressBar);
+            labelDiv.appendChild(progressContainer);
+            labelContainer.appendChild(labelDiv);
+        }
+    }
+
+</script>

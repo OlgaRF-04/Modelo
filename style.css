@@ -1,0 +1,73 @@
+body {
+    background-color: #ffe6f0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff0f5;
+    border: 2px solid #ff99cc;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+    text-align: center;
+}
+
+button {
+    background-color: #ff99cc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #ff66b2;
+}
+
+#webcam-container {
+    margin-top: 20px;
+    border: 2px dashed #ffb6c1;
+    padding: 10px;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+#label-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* Estilo para cada clase con barra de carga */
+.label-bar {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #cc0066;
+}
+
+/* Contenedor de la barra */
+.progress-container {
+    width: 100%;
+    background-color: #fddde6;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 5px;
+}
+
+/* Barra de progreso */
+.progress-bar {
+    height: 100%;
+    background-color: #e066b3; /* tono que combina con rosa */
+    width: 0%;
+    transition: width 0.3s ease;
+}
